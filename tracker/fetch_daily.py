@@ -46,6 +46,20 @@ def fetch(slug):
     return None
 
 
+if os.environ.get("CHECK_ONLY") == "1":
+    # connectivity check: fetch a few cards, print, write nothing
+    sample = list(csv.DictReader((ROOT / "tracked_cards.csv").open()))[:5]
+    ok = 0
+    for c in sample:
+        res = fetch(c["slug"])
+        print(c["name"], "->", res)
+        ok += res is not None
+        time.sleep(0.5)
+    if ok < 3:
+        sys.exit(f"EDHREC check failed: {ok}/5 cards readable from this runner.")
+    print(f"EDHREC check ok: {ok}/5")
+    sys.exit(0)
+
 daily = ROOT / "daily.csv"
 done = set()
 if daily.exists():

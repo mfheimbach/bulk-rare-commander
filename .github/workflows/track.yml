@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "23 4 * * *"   # daily, 04:23 UTC
   workflow_dispatch:
+    inputs:
+      check_only:
+        description: "Only test EDHREC access (fetch 5 cards, write nothing)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -19,8 +24,11 @@ jobs:
         with:
           python-version: "3.12"
       - name: Fetch EDHREC numbers
+        env:
+          CHECK_ONLY: ${{ inputs.check_only && '1' || '0' }}
         run: python tracker/fetch_daily.py
       - name: Commit data
+        if: ${{ !inputs.check_only }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
