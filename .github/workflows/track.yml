@@ -1,0 +1,29 @@
+name: Track new-card inclusion
+
+on:
+  schedule:
+    - cron: "23 4 * * *"   # daily, 04:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    env:
+      TRACK_UNTIL: "2026-12-20"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch EDHREC numbers
+        run: python tracker/fetch_daily.py
+      - name: Commit data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tracker/daily.csv
+          git diff --cached --quiet || git commit -m "tracker: daily snapshot $(date -u +%F)"
+          git push
