@@ -16,7 +16,7 @@ An anti-meta Commander variant: normal Commander rules, minus the most-played ca
 Rebuild after changing `data/banlist.json`:
 
 ```
-python scripts/build_userscript.py <version>
+python scripts/build_userscript.py   # version = build date, e.g. 2026.11.15
 ```
 
 ## Tracker

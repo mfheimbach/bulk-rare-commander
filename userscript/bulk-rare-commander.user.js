@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bulk Rare Commander – legality marker
 // @namespace    mfheimbach.bulk-rare-commander
-// @version      1.0.0
+// @version      2026.11.15
 // @description  Greys out or hides cards banned in the house format (top 10% EDHREC rank, frozen).
 // @match        https://scryfall.com/*
 // @match        https://edhrec.com/*

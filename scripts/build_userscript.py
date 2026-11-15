@@ -1,16 +1,19 @@
 """Build userscript/bulk-rare-commander.user.js from data/banlist.json.
 
 Usage: python scripts/build_userscript.py [version]
+Version defaults to the build date as YYYY.M.D (e.g. 2026.11.15); same-day rebuilds can pass YYYY.M.D.N.
 Mid-season additions live in banlist["added"] (list of {oracle_id, slug, name, date, reason})
 and are merged into the ban list here.
 """
 import json
 import pathlib
 import sys
+import datetime as dt
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 ban = json.loads((ROOT / "data/banlist.json").read_text())
-version = sys.argv[1] if len(sys.argv) > 1 else "1.0.0"
+_d = dt.date.today()
+version = sys.argv[1] if len(sys.argv) > 1 else f"{_d.year}.{_d.month}.{_d.day}"
 
 ids = set(ban["oracle_ids"])
 slugs = set(ban["slugs"])
